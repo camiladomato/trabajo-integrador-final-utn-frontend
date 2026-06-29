@@ -1,0 +1,154 @@
+
+
+.auth-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+  padding: 15px;
+}
+
+.auth-card {
+  width: 100%;
+  background-color: #ffffff;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e2e8f0;
+}
+
+.auth-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.auth-header h2 {
+  font-size: 26px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 6px;
+}
+
+.auth-header p {
+  font-size: 14px;
+  color: #64748b;
+}
+
+
+.auth-error-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background-color: #fef2f2;
+  border-left: 4px solid #ef4444;
+  padding: 12px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+}
+
+.auth-error-alert p {
+  font-size: 13.5px;
+  color: #991b1b;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.error-icon {
+  font-size: 14px;
+}
+
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.form-control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-control-group label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #475569;
+}
+
+.form-control-group input {
+  width: 100%;
+  padding: 12px 14px;
+  font-size: 15px;
+  color: #1e293b;
+  background-color: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  transition: all 0.25s ease-in-out;
+  outline: none;
+}
+
+
+.form-control-group input:focus {
+  border-color: #4169E1;
+  box-shadow: 0 0 0 3px rgba(65, 105, 225, 0.15);
+}
+
+
+.btn-submit-auth {
+  width: 100%;
+  padding: 13px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #ffffff;
+  background-color: #4169E1; 
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  margin-top: 6px;
+}
+
+.btn-submit-auth:hover:not(:disabled) {
+  background-color: #1e40af; 
+}
+
+.btn-submit-auth:disabled {
+  background-color: #93c5fd;
+  cursor: not-allowed;
+}
+
+
+.auth-footer-redirect {
+  text-align: center;
+  margin-top: 24px;
+  border-top: 1px solid #f1f5f9;
+  padding-top: 18px;
+}
+
+.auth-footer-redirect p {
+  font-size: 13.5px;
+  color: #64748b;
+  margin-bottom: 4px;
+}
+
+.auth-footer-redirect a {
+  font-size: 14px;
+  font-weight: 600;
+  color: #4169E1;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.auth-footer-redirect a:hover {
+  color: #1e40af;
+  text-decoration: underline;
+}
+
+
+@media (min-width: 480px) {
+  .auth-card {
+    max-width: 420px;
+    padding: 35px;
+  }
+}
