@@ -5,25 +5,22 @@ import './UserDashboard.css';
 const UserDashboard = () => {
   const { token } = useContext(AuthContext);
 
-
   const [tasks, setTasks] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [sort, setSort] = useState('desc');
   const [categoryFilter, setCategoryFilter] = useState('');
 
-
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
   
-
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
 
-
   const fetchTasks = async () => {
+    setLoading(true);
     try {
       let url = `http://localhost:3000/api/tasks?page=${page}&limit=4&sort=${sort}`;
       if (categoryFilter) {
@@ -39,25 +36,26 @@ const UserDashboard = () => {
       
       if (data.status === 'success') {
         setTasks(data.data);
-        setTotalPages(data.pagination.totalPages || 1);
+       
+        setTotalPages(Math.ceil(data.pagination.totalItems / data.pagination.limit) || 1);
       }
     } catch (err) {
       setError('Error al cargar las tareas.');
+    } finally {
+      setLoading(false);
     }
   };
-
 
   useEffect(() => {
     fetchTasks();
   }, [page, sort, categoryFilter, token]);
-
 
   const handleCreateTask = async (e) => {
     e.preventDefault();
     setError('');
     setSuccess('');
 
-    if (!title) {
+    if (!title.trim()) {
       setError('El título de la tarea es obligatorio.');
       return;
     }
@@ -69,7 +67,7 @@ const UserDashboard = () => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ title, description, category })
+        body: JSON.stringify({ title, description, category: category.toLowerCase().trim() })
       });
       const data = await res.json();
 
@@ -126,11 +124,10 @@ const UserDashboard = () => {
 
   return (
     <div className="dashboard-layout">
-      
-
       <aside className="dashboard-sidebar">
         <div className="dashboard-card">
-          <h3>Nueva Tareas ✨</h3>
+         
+          <h3>Nueva Tarea ✨</h3>
           <form onSubmit={handleCreateTask} className="task-form">
             <div className="form-group-task">
               <label>Título *</label>
@@ -145,7 +142,7 @@ const UserDashboard = () => {
               <label>Categoría</label>
               <input 
                 type="text" 
-                placeholder="Ej: Universidad, Trabajo" 
+                placeholder="Ej: universidad, trabajo, personal" 
                 value={category} 
                 onChange={(e) => setCategory(e.target.value)}
               />
@@ -166,19 +163,16 @@ const UserDashboard = () => {
         </div>
       </aside>
 
-   
       <main className="dashboard-main">
-        
-      
         <div className="toolbar-card">
           <div className="filter-box">
             <label>Filtrar por categoría:</label>
             <input 
               type="text" 
-              placeholder="Escribí y presioná enter..." 
+              placeholder="Ej: universidad (Borrar para limpiar)" 
               value={categoryFilter}
               onChange={(e) => {
-                setCategoryFilter(e.target.value);
+                setCategoryFilter(e.target.value.toLowerCase());
                 setPage(1); 
               }}
             />
@@ -192,40 +186,43 @@ const UserDashboard = () => {
           </div>
         </div>
 
-        <div className="tasks-grid">
-          {tasks.length === 0 ? (
-            <div className="empty-state">
-              <p>No tenés tareas creadas que coincidan con la búsqueda. 📋</p>
-            </div>
-          ) : (
-            tasks.map(task => (
-              <div key={task._id} className={`task-item-card ${task.status}`}>
-                <div className="task-item-header">
-                  <h4>{task.title}</h4>
-                  {task.category && <span className="task-badge">{task.category}</span>}
-                </div>
-                <p className="task-item-desc">{task.description || 'Sin descripción.'}</p>
-                
-                <div className="task-item-footer">
-                  <button 
-                    onClick={() => toggleTaskStatus(task._id, task.status)}
-                    className={`btn-status ${task.status}`}
-                  >
-                    {task.status === 'completed' ? '✓ Completada' : '⭘ Marcar hecha'}
-                  </button>
-                  <button 
-                    onClick={() => handleDeleteTask(task._id)}
-                    className="btn-delete-task"
-                  >
-                    Eliminar
-                  </button>
-                </div>
+        {loading ? (
+          <div className="empty-state">Cargando tus tareas...</div>
+        ) : (
+          <div className="tasks-grid">
+            {tasks.length === 0 ? (
+              <div className="empty-state">
+                <p>No tenés tareas creadas que coincidan con la búsqueda. 📋</p>
               </div>
-            ))
-          )}
-        </div>
+            ) : (
+              tasks.map(task => (
+                <div key={task._id} className={`task-item-card ${task.status}`}>
+                  <div className="task-item-header">
+                    <h4>{task.title}</h4>
+                    {task.category && <span className="task-badge">{task.category}</span>}
+                  </div>
+                  <p className="task-item-desc">{task.description || 'Sin descripción.'}</p>
+                  
+                  <div className="task-item-footer">
+                    <button 
+                      onClick={() => toggleTaskStatus(task._id, task.status)}
+                      className={`btn-status ${task.status}`}
+                    >
+                      {task.status === 'completed' ? '✓ Completada' : '⭘ Marcar hecha'}
+                    </button>
+                    <button 
+                      onClick={() => handleDeleteTask(task._id)}
+                      className="btn-delete-task"
+                    >
+                      Eliminar
+                    </button>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        )}
 
-       
         {totalPages > 1 && (
           <div className="pagination-wrapper">
             <button 
@@ -246,7 +243,6 @@ const UserDashboard = () => {
           </div>
         )}
       </main>
-
     </div>
   );
 };

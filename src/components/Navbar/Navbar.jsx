@@ -18,11 +18,15 @@ const Navbar = () => {
         <h3>UTN Gestor</h3>
       </div>
       <div className="navbar-links">
-        {user?.role === 'admin' ? (
-          <Link to="/admin">Panel Admin</Link>
-        ) : (
-          <Link to="/dashboard">Mis Tareas</Link>
+     
+        {user && <Link to="/dashboard">Mis Tareas</Link>}
+       
+        {user?.role === 'admin' && (
+          <Link to="/admin" style={{ fontWeight: '700', color: '#4169E1' }}>
+            Panel Admin 🛠️
+          </Link>
         )}
+        
         <span className="user-welcome">Hola, {user?.name || 'Usuario'}</span>
         <button onClick={handleLogout} className="btn-logout">Salir</button>
       </div>
