@@ -3,7 +3,7 @@ import { AuthContext } from '../../context/AuthContext';
 import './UserDashboard.css';
 
 const UserDashboard = () => {
-  const { token } = useContext(AuthContext);
+  const { token , user } = useContext(AuthContext);
 
   const [tasks, setTasks] = useState([]);
   const [page, setPage] = useState(1);
@@ -18,6 +18,8 @@ const UserDashboard = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const isAdmin = user?.role === 'admin';
 
   const fetchTasks = async () => {
     setLoading(true);
@@ -127,7 +129,7 @@ const UserDashboard = () => {
       <aside className="dashboard-sidebar">
         <div className="dashboard-card">
          
-          <h3>Nueva Tarea ✨</h3>
+          <h3>Nueva Tarea</h3>
           <form onSubmit={handleCreateTask} className="task-form">
             <div className="form-group-task">
               <label>Título *</label>
@@ -136,6 +138,7 @@ const UserDashboard = () => {
                 placeholder="Ej: Estudiar para UTN" 
                 value={title} 
                 onChange={(e) => setTitle(e.target.value)}
+                disabled={isAdmin}
               />
             </div>
             <div className="form-group-task">
@@ -145,6 +148,7 @@ const UserDashboard = () => {
                 placeholder="Ej: universidad, trabajo, personal" 
                 value={category} 
                 onChange={(e) => setCategory(e.target.value)}
+                disabled={isAdmin}
               />
             </div>
             <div className="form-group-task">
@@ -154,9 +158,12 @@ const UserDashboard = () => {
                 rows="3"
                 value={description} 
                 onChange={(e) => setDescription(e.target.value)}
+                disabled={isAdmin}
               ></textarea>
             </div>
-            <button type="submit" className="btn-create-task">Guardar Tarea</button>
+            <button type="submit" className="btn-create-task" disabled={isAdmin}>
+              {isAdmin ? "🚫 Los administradores no crean tareas" : "Guardar Tarea"}
+            </button>
           </form>
           {success && <p className="alert-success-task">{success}</p>}
           {error && <p className="alert-error-task">{error}</p>}
@@ -175,6 +182,7 @@ const UserDashboard = () => {
                 setCategoryFilter(e.target.value.toLowerCase());
                 setPage(1); 
               }}
+              
             />
           </div>
           <div className="filter-box">

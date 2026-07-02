@@ -219,6 +219,24 @@
 
 .page-indicator { font-size: 13.5px; color: #475569; font-weight: 500;}
 
+.form-group-task input:disabled,
+.form-group-task textarea:disabled {
+  background-color: #f1f5f9;
+  color: #94a3b8;
+  border-color: #cbd5e1;
+  cursor: not-allowed;
+}
+
+.btn-create-task:disabled {
+  background-color: #cbd5e1;
+  color: #64748b;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.btn-create-task:disabled:hover {
+  background-color: #cbd5e1;
+}
 
 
 @media (min-width: 768px) {
